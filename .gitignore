@@ -1,0 +1,6 @@
+# under yolo
+/yolo/*.cfg
+/yolo/*.weight*
+/yolo/*.trt
+/yolo/*.onnx
+*.so
