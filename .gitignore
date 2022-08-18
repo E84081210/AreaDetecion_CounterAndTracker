@@ -4,3 +4,5 @@
 /yolo/*.trt
 /yolo/*.onnx
 *.so
+yolo/__pycache__/plugins.cpython-38.pyc
+yolo/__pycache__/yolo_to_onnx.cpython-38.pyc
