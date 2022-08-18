@@ -1,8 +1,8 @@
 """yolo_classes.py
-
 NOTE: Number of YOLO COCO output classes differs from SSD COCO models.
 """
 
+# 所有可辨識物件
 COCO_CLASSES_LIST = [
     'person',
     'bicycle',

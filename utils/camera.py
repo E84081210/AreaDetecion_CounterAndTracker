@@ -1,5 +1,4 @@
 """camera.py
-
 This code implements the Camera class, which encapsulates code to
 handle IP CAM, USB webcam or the Jetson onboard camera.  In
 addition, this Camera class is further extended to take a video
@@ -19,9 +18,10 @@ import cv2
 # pipeline to open USB webcam source.  If set to False, we just open
 # the webcam using cv2.VideoCapture(index) machinery. i.e. relying
 # on cv2's built-in function to capture images from the webcam.
-USB_GSTREAMER = True
+USB_GSTREAMER = False
 
-
+# 需要關鍵字去說明上傳的檔案格式
+# 亦可以指定需求長寬比
 def add_camera_args(parser):
     """Add parser augument for camera options."""
     parser.add_argument('--image', type=str, default=None,
@@ -54,25 +54,26 @@ def add_camera_args(parser):
 
 def open_cam_rtsp(uri, width, height, latency):
     """Open an RTSP URI (IP CAM)."""
-    gst_elements = str(subprocess.check_output('gst-inspect-1.0'))
-    if 'omxh264dec' in gst_elements:
-        # Use hardware H.264 decoder on Jetson platforms
-        gst_str = ('rtspsrc location={} latency={} ! '
-                   'rtph264depay ! h264parse ! omxh264dec ! '
-                   'nvvidconv ! '
-                   'video/x-raw, width=(int){}, height=(int){}, '
-                   'format=(string)BGRx ! videoconvert ! '
-                   'appsink').format(uri, latency, width, height)
-    elif 'avdec_h264' in gst_elements:
-        # Otherwise try to use the software decoder 'avdec_h264'
-        # NOTE: in case resizing images is necessary, try adding
-        #       a 'videoscale' into the pipeline
-        gst_str = ('rtspsrc location={} latency={} ! '
-                   'rtph264depay ! h264parse ! avdec_h264 ! '
-                   'videoconvert ! appsink').format(uri, latency)
-    else:
-        raise RuntimeError('H.264 decoder not found!')
-    return cv2.VideoCapture(gst_str, cv2.CAP_GSTREAMER)
+    return cv2.VideoCapture(uri)
+    # gst_elements = str(subprocess.check_output('gst-inspect-1.0'))
+    # if 'omxh264dec' in gst_elements:
+    #     # Use hardware H.264 decoder on Jetson platforms
+    #     gst_str = ('rtspsrc location={} latency={} ! '
+    #                 'rtph264depay ! h264parse ! omxh264dec ! '
+    #                 'nvvidconv ! '
+    #                 'video/x-raw, width=(int){}, height=(int){}, '
+    #                 'format=(string)BGRx ! videoconvert ! '
+    #                 'appsink').format(uri, latency, width, height)
+    # elif 'avdec_h264' in gst_elements:
+    #     # Otherwise try to use the software decoder 'avdec_h264'
+    #     # NOTE: in case resizing images is necessary, try adding
+    #     #       a 'videoscale' into the pipeline
+    #     gst_str = ('rtspsrc location={} latency={} ! '
+    #                 'rtph264depay ! h264parse ! avdec_h264 ! '
+    #                 'videoconvert ! appsink').format(uri, latency)
+    # else:
+    #     raise RuntimeError('H.264 decoder not found!')
+    # return cv2.VideoCapture(gst_str, cv2.CAP_GSTREAMER)
 
 
 def open_cam_usb(dev, width, height):
@@ -82,13 +83,13 @@ def open_cam_usb(dev, width, height):
                    'video/x-raw, width=(int){}, height=(int){} ! '
                    'videoconvert ! appsink').format(dev, width, height)
         return cv2.VideoCapture(gst_str, cv2.CAP_GSTREAMER)
+        
     else:
         return cv2.VideoCapture(dev)
 
 
 def open_cam_gstr(gstr, width, height):
     """Open camera using a GStreamer string.
-
     Example:
     gstr = 'v4l2src device=/dev/video0 ! video/x-raw, width=(int){width}, height=(int){height} ! videoconvert ! appsink'
     """
@@ -139,7 +140,6 @@ def grab_img(cam):
 
 class Camera():
     """Camera class which supports reading images from theses video sources:
-
     1. Image (jpg, png, etc.) file, repeating indefinitely
     2. Video file
     3. RTSP (IP CAM)
@@ -148,6 +148,7 @@ class Camera():
     """
 
     def __init__(self, args):
+        # place holder
         self.args = args
         self.is_opened = False
         self.video_file = ''
@@ -161,12 +162,15 @@ class Camera():
         self.cap = None
         self.thread = None
         self._open()  # try to open the camera
-
+    # 置前下滑線表示並不是使用者所會接觸（依舊能夠調用）
     def _open(self):
         """Open camera based on command line arguments."""
         if self.cap is not None:
             raise RuntimeError('camera is already opened!')
+        
+        # 實例化 args 
         a = self.args
+
         if a.image:
             logging.info('Camera: using a image file %s' % a.image)
             self.cap = 'image'
@@ -236,7 +240,6 @@ class Camera():
 
     def read(self):
         """Read a frame from the camera object.
-
         Returns None if the camera runs out of image or error.
         """
         if not self.is_opened:

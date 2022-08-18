@@ -1,5 +1,4 @@
 """yolo_with_plugins.py
-
 Implementation of TrtYOLO class with the yolo_layer plugins.
 """
 
@@ -14,6 +13,7 @@ import tensorrt as trt
 import pycuda.driver as cuda
 
 
+
 try:
     ctypes.cdll.LoadLibrary('./plugins/libyolo_layer.so')
 except OSError as e:
@@ -24,13 +24,11 @@ except OSError as e:
 
 def _preprocess_yolo(img, input_shape, letter_box=False):
     """Preprocess an image before TRT YOLO inferencing.
-
     # Args
         img: int8 numpy array of shape (img_h, img_w, 3)
         input_shape: a tuple of (H, W)
         letter_box: boolean, specifies whether to keep aspect ratio and
                     create a "letterboxed" image for inference
-
     # Returns
         preprocessed img: float32 numpy array of shape (3, H, W)
     """
@@ -60,7 +58,6 @@ def _nms_boxes(detections, nms_threshold):
     """Apply the Non-Maximum Suppression (NMS) algorithm on the bounding
     boxes with their confidence scores and return an array with the
     indexes of the bounding boxes we want to keep.
-
     # Args
         detections: Nx7 numpy arrays of
                     [[x, y, w, h, box_confidence, class_id, class_prob],
@@ -100,14 +97,12 @@ def _nms_boxes(detections, nms_threshold):
 def _postprocess_yolo(trt_outputs, img_w, img_h, conf_th, nms_threshold,
                       input_shape, letter_box=False):
     """Postprocess TensorRT outputs.
-
     # Args
         trt_outputs: a list of 2 or 3 tensors, where each tensor
                     contains a multiple of 7 float32 numbers in
                     the order of [x, y, w, h, box_confidence, class_id, class_prob]
         conf_th: confidence threshold
         letter_box: boolean, referring to _preprocess_yolo()
-
     # Returns
         boxes, scores, classes (after NMS)
     """
@@ -209,12 +204,16 @@ def allocate_buffers(engine):
             size = trt.volume(binding_dims) * engine.max_batch_size
         else:
             raise ValueError('bad dims of binding %s: %s' % (binding, str(binding_dims)))
+
         dtype = trt.nptype(engine.get_binding_dtype(binding))
+
         # Allocate host and device buffers
         host_mem = cuda.pagelocked_empty(size, dtype)
         device_mem = cuda.mem_alloc(host_mem.nbytes)
+        
         # Append the device buffer to device bindings.
         bindings.append(int(device_mem))
+        
         # Append to the appropriate list.
         if engine.binding_is_input(binding):
             inputs.append(HostDeviceMem(host_mem, device_mem))
@@ -231,7 +230,6 @@ def allocate_buffers(engine):
 
 def do_inference(context, bindings, inputs, outputs, stream, batch_size=1):
     """do_inference (for TensorRT 6.x or lower)
-
     This function is generalized for multiple inputs/outputs.
     Inputs and outputs are expected to be lists of HostDeviceMem objects.
     """
@@ -251,19 +249,22 @@ def do_inference(context, bindings, inputs, outputs, stream, batch_size=1):
 
 def do_inference_v2(context, bindings, inputs, outputs, stream):
     """do_inference_v2 (for TensorRT 7.0+)
-
     This function is generalized for multiple inputs/outputs for full
     dimension networks.
     Inputs and outputs are expected to be lists of HostDeviceMem objects.
     """
     # Transfer input data to the GPU.
     [cuda.memcpy_htod_async(inp.device, inp.host, stream) for inp in inputs]
+
     # Run inference.
     context.execute_async_v2(bindings=bindings, stream_handle=stream.handle)
+    
     # Transfer predictions back from the GPU.
     [cuda.memcpy_dtoh_async(out.host, out.device, stream) for out in outputs]
+    
     # Synchronize the stream
     stream.synchronize()
+    
     # Return only the host outputs.
     return [out.host for out in outputs]
 
@@ -273,6 +274,7 @@ class TrtYOLO(object):
 
     def _load_engine(self):
         TRTbin = 'yolo/%s.trt' % self.model
+
         with open(TRTbin, 'rb') as f, trt.Runtime(self.trt_logger) as runtime:
             return runtime.deserialize_cuda_engine(f.read())
 
@@ -282,11 +284,13 @@ class TrtYOLO(object):
         self.category_num = category_num
         self.letter_box = letter_box
         self.cuda_ctx = cuda_ctx
+
         if self.cuda_ctx:
-            self.cuda_ctx.push()
+            self.cuda_ctx.push() # tensorrt context push and pop
 
         self.inference_fn = do_inference if trt.__version__[0] < '7' \
                                          else do_inference_v2
+
         self.trt_logger = trt.Logger(trt.Logger.INFO)
         self.engine = self._load_engine()
 
@@ -311,19 +315,25 @@ class TrtYOLO(object):
     def detect(self, img, conf_th=0.3, letter_box=None):
         """Detect objects in the input image."""
         letter_box = self.letter_box if letter_box is None else letter_box
+
+        # 前處理
         img_resized = _preprocess_yolo(img, self.input_shape, letter_box)
 
         # Set host input to the image. The do_inference() function
         # will copy the input to the GPU before executing.
+
+        # 丟進記憶體
         self.inputs[0].host = np.ascontiguousarray(img_resized)
         if self.cuda_ctx:
             self.cuda_ctx.push()
+            
         trt_outputs = self.inference_fn(
             context=self.context,
             bindings=self.bindings,
             inputs=self.inputs,
             outputs=self.outputs,
             stream=self.stream)
+            
         if self.cuda_ctx:
             self.cuda_ctx.pop()
 
