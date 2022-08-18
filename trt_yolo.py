@@ -3,7 +3,6 @@ This script demonstrates how to do real-time object detection with
 TensorRT optimized YOLO engine.
 """
 
-
 import math
 import os, sys, logging
 import time
@@ -78,14 +77,14 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis):
     win_name1, win_name2 = "Draw Area 01", "Draw Area 02"
     area1 = AreaDetection(cam, win1, win_name1)
     area2 = AreaDetection(cam, win2, win_name2, area1)
-    
+
     while True:
         frame_count += 1
         
         # initialize current point
         # [center_x, center_y, situation, history]
-        # situation   = 1     if object is in area, passing cv2.pointPolygonTest
-        # history     = 1     if object has never entered area, i.e. never been counted
+        # situation   = 1  if object is in area, passing cv2.pointPolygonTest
+        # history     = 1  if object has never entered area, i.e. never been counted
         cur_pnt = []
 
         tic = time.time()

@@ -7,6 +7,8 @@ bounding boxes based on object detection results.
 import numpy as np
 import cv2
 
+from utils.style import BLUE, RED, GREEN, WHITE, KELIN, BLACK, \
+    LINE, Remind
 
 # Constants
 ALPHA = 0.5
@@ -93,16 +95,28 @@ class BBoxVisualization():
         self.cls_dict = cls_dict
         self.colors = gen_colors(len(cls_dict))
 
-    def draw_bboxes(self, img, boxes, confs, clss):
+    def draw_bboxes(self, img, boxes, confs, clss, ignoreArea, focusArea):
         """Draw detected bounding boxes on the original image."""
         # Zip 封裝所有類型的數據
         for bb, cf, cl in zip(boxes, confs, clss):
-            
           cl = int(cl)
+          if cl != 0:
+            continue
           # 實例化 List
           x_min, y_min, x_max, y_max = bb[0], bb[1], bb[2], bb[3]
+          center_x = int((x_min + x_max)/2)
+  
           color = self.colors[cl]
-          cv2.rectangle(img, (x_min, y_min), (x_max, y_max), color, 2)
+
+          interest = cv2.pointPolygonTest(np.array(focusArea.save_pnt, np.int32), (center_x, int(y_max)), False)
+          un_interset = cv2.pointPolygonTest(np.array(ignoreArea.save_pnt, np.int32), (center_x, int(y_max)), False)
+          if un_interset == 1:
+            continue
+          
+          if interest == 1:
+            cv2.rectangle(img, (x_min, y_min), (x_max, y_max), RED, 2)
+          else: 
+            cv2.rectangle(img, (x_min, y_min), (x_max, y_max), color, 2)
         
           # 文字方塊放置的位置，Max 就是取兩者較大
           txt_loc = (max(x_min+2, 0), max(y_min+2, 0))

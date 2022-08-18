@@ -3,6 +3,7 @@
 /yolo/*.weight*
 /yolo/*.trt
 /yolo/*.onnx
+/yolo/__pycache__/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
