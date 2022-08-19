@@ -71,6 +71,7 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis):
     FlowCount       = 0
     FlowUp          = 0
     FlowDown        = 0
+    DoorRequest     = 0
     
     # draw polygon area
     win1, win2 = "Area01", "Area02"
@@ -80,6 +81,8 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis):
 
     while True:
         frame_count += 1
+        if (frame_count % 100) == 0:
+            DoorRequest = 0
         
         # initialize current point
         # [center_x, center_y, situation, history]
@@ -116,6 +119,9 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis):
                 continue    
             elif interest == 1:
                 cur_pnt.append([center_x, center_y, 1, 1])
+                if DoorRequest == 0:
+                    #subprocess("mosquitto_pub -h 172.16.21.2 -t action -m OpenDoor", shell=True)
+                    DoorRequest += 1                    
                 # Open the door
                 # MAKE SURE you have 100% confidence with your program
                 # subprocess("mosquitto_pub -h 172.16.21.2 -t action -m OpenDoor", shell=True)
@@ -205,7 +211,7 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis):
         img = show_fps(img, fps)
         Remind(img,
             "FlowCount  : {}".format(FlowCount), 
-            "Exit         : {}".format(FlowUp),
+            "Exit        : {}".format(FlowUp),
             "Entrance   : {}".format(FlowDown))
         cv2.imshow(WINDOW_NAME, img)
         key = cv2.waitKey(1)

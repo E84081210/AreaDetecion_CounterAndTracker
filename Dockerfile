@@ -3,7 +3,10 @@ USER root
 WORKDIR /workplace
 COPY yolo/ ./yolo/
 COPY utils/ ./utils/
-COPY ./trt_yolo.py .
-RUN echo hello
-CMD ["echo", "hello-world"]
- 
+COPY ["./trt_yolo.py", "./requirements.sh", "./rtsp.sh", "/workplace/"]
+RUN chmod +x *.sh \ 
+    && ./requirements.sh \
+CMD ["bash", "-c", "echo", "Docker container has been activated", "&&", "/bin/bash"]
+
+
+

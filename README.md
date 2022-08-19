@@ -106,6 +106,7 @@ $ sudo docker exec -it {name:tag}
 ```shell
 $ pip3 install opencv-python
 $ pip3 install numpy --upgrade
+$ pip3 install pycuda==2019.1.2
 $ pip3 install protobuf==3.20
 $ pip3 install protobuf-compiler libprotoc-dev
 $ pip3 install onnx=1.9.0
