@@ -71,7 +71,8 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis):
     FlowCount       = 0
     FlowUp          = 0
     FlowDown        = 0
-    DoorRequest     = 0
+    DoorRequest     = True
+    PreviousOpen    = 0
     
     # draw polygon area
     win1, win2 = "Area01", "Area02"
@@ -81,8 +82,9 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis):
 
     while True:
         frame_count += 1
-        if (frame_count % 100) == 0:
-            DoorRequest = 0
+        tic = time.time()
+        if tic - PreviousOpen > 5:
+            DoorRequest = True
         
         # initialize current point
         # [center_x, center_y, situation, history]
@@ -90,7 +92,6 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis):
         # history     = 1  if object has never entered area, i.e. never been counted
         cur_pnt = []
 
-        tic = time.time()
         img = cam.read()
         if cv2.getWindowProperty(WINDOW_NAME, 0) < 0 or img is None:
             break
@@ -119,9 +120,12 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis):
                 continue    
             elif interest == 1:
                 cur_pnt.append([center_x, center_y, 1, 1])
-                if DoorRequest == 0:
-                    #subprocess("mosquitto_pub -h 172.16.21.2 -t action -m OpenDoor", shell=True)
-                    DoorRequest += 1                    
+                if DoorRequest:
+                    p = subprocess.run(["mosquitto_pub", "-h" , "172.16.21.2", "-t", "action", "-m", "OpenDoor"])
+                    PreviousOpen = time.time()
+                    if p.returncode == 0:
+                        print("Open")
+                    DoorRequest = False                    
                 # Open the door
                 # MAKE SURE you have 100% confidence with your program
                 # subprocess("mosquitto_pub -h 172.16.21.2 -t action -m OpenDoor", shell=True)
