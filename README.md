@@ -1,24 +1,7 @@
-# Peopleflow counting with YOLOv4-TensorRT
+# AreaDetecion_CounterAndTracker
 
-
-
-:whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale:
-
-
-
-:one: __Example demonstrates people-flow counting with YOLOv4-TensorRT.__
-
-
-
-:two: __This is the combination with area detection and tracker.__
-
-
-
-:three: __Only works on NVIDIA Jetson Platform__
-
-
-
-:whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale::whale:
+[![Yolov4](https://img.shields.io/badge/YOLOv4--TRT-AreaDetection-brightgreen)](https://github.com/E84081210/AreaDetecion_CounterAndTracker)
+Example demonstrates people-flow counting with YOLOv4-TensorRT, reaching a combination of area detection and object tracker. Developing with NVIDIA Jetson platform is mandatory. This code is written for education purpose specifically.
 
 ## Table of contents
 
@@ -29,6 +12,8 @@
     - [Methods](#methods)
 
     - [This example is for...](#this-example-is-for)
+
+- [Prerequisite](#prerequisite)
 
 - [License](#license)
 
@@ -90,7 +75,7 @@ This example is particularly designed for flow counting, thus RTSP source is nec
 
 ## Prerequisite
 
-:zero: Update and upgrade your "pip3" and "apt-get" is a __good habit__.
+:zero: Update and upgrade your "pip3" and "apt-get" first
 ```shell
 $ sudo apt-get update
 $ sudo apt-get upgrade
@@ -102,7 +87,7 @@ $ pip3 install --upgrade pip
 $ git clone https://github.com/E84081210/Innotect-humanDetection.git
 ```
 
-:two: build Docker images
+:two: build Docker image. Check [this](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/) out if you never learned it before.
 ```shell
 $ cd ${HOME}/Innotect-humanDetecion/
 $ sudo docker build -t {name:tag}
@@ -110,9 +95,7 @@ $ sudo docker run {name:tag}
 $ sudo docker exec -it {name:tag}
 ```
 
-
-
-:information_desk_person: __Back up plan__: If you meet some problem with Docker, you may also install package manually.
+:raised_hands: __Back up plan__: If you meet some problem with Docker, you may also install package manually.
 | Package   | Version   | Note            |
 | :----     | :---      | :---            |
 | OpenCV    | 3.4.6     | latest is fine  |
@@ -128,13 +111,13 @@ $ pip3 install protobuf-compiler libprotoc-dev
 $ pip3 install onnx=1.9.0
 ```
 
-:three: Go to plugins file and build "yolo_layer" plugin. ".so" would be generate. 
+:three: Go to plugins file and build "yolo_layer" plugin. File with ".so" at the end would be generated. 
 ```shell
 $ cd ${HOME}/Innotect-humanDetecion/plugins
 $ make
 ```
 
-:four: Download YOLOv4 models and convert it to ONNX and then to TensorRT engine.
+:four: Download YOLOv4 models and convert it to ONNX and then to TensorRT engine. I'll take "yolov4-416" this time.
 ```shell
 $ cd ${HOME}/Innotect-humanDetecion/yolo
 $ ./download_yolo.s
@@ -142,7 +125,15 @@ $ python3 yolo_to_onnx.py -m yolov4-416
 $ python3 onnx_to_tensorrt.py -m yolov4-416
 ```
 
-Last step "onnx_to_tensorrt.py" takes about half to one hour.
+Last step "onnx_to_tensorrt.py" takes about half hour on my Jetson AGX Xavier.
+
+:five: Final step: go to "rtsp.sh", and modify your RTSP ID and YOLO model name. Run ```chmod +x rtsp.sh``` if shell scipt is denied by permission.
+```shell
+# rtsp.sh
+!#/bin/bash
+
+python3.8 trt_yolo.py -m yolov4-416 --rtsp {RTSP_ADDRESS}
+```
 
 ## Licences
 
@@ -159,6 +150,5 @@ Last step "onnx_to_tensorrt.py" takes about half to one hour.
 3. [OpenCV document](https://docs.opencv.org/4.x/)
 
 :star: This repository is under MIT License.
-
 
 
