@@ -25,9 +25,14 @@ People-flow counting with YOLOv4-TensorRT, reaching a combination of area detect
 - [License](#license)
 
 ### Background
-" AreaDetecion_CounterAndTracker " was originally inspired by [jkjung-avt/tensorrt_demos](https://github.com/jkjung-avt/tensorrt_demos), what I do is adding more features based on it. After browsing around GitHub, I can't find an example code like that, or just too obscure for an internship like me, haha.
+" AreaDetecion_CounterAndTracker " was originally inspired by [jkjung-avt/tensorrt_demos](https://github.com/jkjung-avt/tensorrt_demos), what I do is adding more features on it. 
 
-When it comes to tracker, there are lots of built-in package in OpenCV, leading to high-end device demanding eventually. I decides to adopt the simplest algorithm to rasie the accuracy, in order to allow people with device such as Jetson NANO with yolov3-tiny to operate it smoothly.
+After browsing around GitHub, I can't find an futher application based on him, or just too obscure for an internship like me, so I decided to write down my own one. 
+
+The primary features are Tracker, Areadetecion and Counter. Let's dive into it if you are interested.
+1. Tracker: there are lots of built-in package in OpenCV, leading to high-end device demanding eventually. I adopt the simplest algorithm to rasie the accuracy, which allows device such as Jetson NANO with yolov3-tiny to operate it smoothly. By the way, since we don't have precise tracker, it's will be embarrassed if we label it with ID, so I decided to hide it.
+2. AreaDetection: in order to reduce the burden on device, if a person enter ignored area, it will not display bounding boxes or go through the claculation of tracker. On top of that, ignored area makes windows keep neat.
+3. Counter: comparing with the previous frame, we can easily tell whether "enter" or "entrance".
 
 I still have tons of things to learn, considering code style and fundamental knowledge. It's would be nice if you share with me what or how to improve my work, so feel free to leave the comment or send a text to me, have a nice one ! --AntonyChiu
 
@@ -42,7 +47,7 @@ This example is particularly designed for flow counting, thus RTSP source is nec
 
     - Target    : user define which area should focus on, i.e. where counter operate.
 
-    - Ignore    : user define which area should ignore.
+    - Ignore    : user define which area should be ignored.
 
 - Counter
 
@@ -64,11 +69,11 @@ This example is particularly designed for flow counting, thus RTSP source is nec
 
 - YOLOv4
 
-    - Tracker needs the exact position of object, which means we have to apply object detection first.
+    - Tracker needs the exact position of object, which means we have to apply object detection first. The exact position of object will return from it.
 
 - TensorRT
 
-    - It's not simple at all, but I recommend take a look at [NVIDIA official website](https://developer.nvidia.com/tensorrt).
+    - speed up the process. I recommendyou take a look at [NVIDIA official website](https://developer.nvidia.com/tensorrt).
 
 - Docker
 
@@ -82,7 +87,7 @@ This example is particularly designed for flow counting, thus RTSP source is nec
 
 :heavy_check_mark: Read [jkjung-avt/tensorrt_demo](https://github.com/jkjung-avt/tensorrt_demos) beforehead is more than better.
 
-:x: Looking for deeper TensorRT lesson, because I won't explain it too much.
+:x: Looking for deeper TensorRT lesson.
 
 :x: Off-the-shelf product. The precision is about 90 %, and it will decrease in different scenario.
 
@@ -159,11 +164,12 @@ cd ${HOME}/Innotect-humanDetecion/
 ```shell
 預留
 ```
+
 :two: Draw Target area, demanding at least three points. Press "C" to clean all points, "H" to show help message, "Q" to continue.
+
 Focus area will count and carry out command such as open door.
 
 :three: Draw Ignore area, demanding at least three points. Press "C" to clean all points, "H" to show help message, "Q" to continue.
-
 __Congrats!__ 
 result
 
