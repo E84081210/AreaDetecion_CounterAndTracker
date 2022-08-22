@@ -1,16 +1,14 @@
 # AreaDetecion_CounterAndTracker
 
 [![Yolov4](https://img.shields.io/badge/YOLOv4--TRT-AreaDetection-brightgreen)](https://github.com/E84081210/AreaDetecion_CounterAndTracker)
-<<<<<<< HEAD
 Pedestrian flow analysis with YOLOv4-TensorRT, reaching a combination of area detection and object tracker.
-=======
-People-flow counting with YOLOv4-TensorRT, reaching a combination of area detection and object tracker.
->>>>>>> fee63c3ed8eee580fcd12c5e9c18de867812dc44
 - Developing with NVIDIA Jetson platform is mandatory.
 - This code is written for educational purposes.
 - Design for scenario such as company or street RTSP source.
 
-### Table of contents
+#### Table of contents
+
+- [Background](#background)
 
 - [Background](#background)
 
@@ -23,10 +21,25 @@ People-flow counting with YOLOv4-TensorRT, reaching a combination of area detect
     - [This example is for...](#this-example-is-for)
 
 - [Prerequisite](#prerequisite)
-  
+    
+- [Usage]
+
 - [Usage]
 
 - [License](#license)
+
+### Background
+" AreaDetecion_CounterAndTracker " was originally inspired by [jkjung-avt/tensorrt_demos](https://github.com/jkjung-avt/tensorrt_demos), what I do is adding more features on it. 
+
+After browsing around GitHub, I can't find an futher application based on him, or just too obscure for an internship like me, so I decided to write down my own one. 
+
+The primary features are Tracker, Areadetecion and Counter. Let's dive into it if you are interested.
+1. Tracker: there are lots of built-in package in OpenCV, leading to high-end device demanding eventually. I adopt the simplest algorithm to rasie the accuracy, which allows device such as Jetson NANO with yolov3-tiny to operate it smoothly. By the way, since we don't have precise tracker, it's will be embarrassed if we label it with ID, so I decided to hide it.
+2. AreaDetection: in order to reduce the burden on device, if a person enter ignored area, it will not display bounding boxes or go through the claculation of tracker. On top of that, ignored area makes windows keep neat.
+3. Counter: comparing with the previous frame, we can easily tell whether "enter" or "entrance".
+
+I still have tons of things to learn, considering code style and fundamental knowledge. It's would be nice if you share with me what or how to improve my work, so feel free to leave the comment or send a text to me, have a nice one ! --AntonyChiu
+
 
 ### Background
 " AreaDetecion_CounterAndTracker " was originally inspired by [jkjung-avt/tensorrt_demos](https://github.com/jkjung-avt/tensorrt_demos), what I do is adding more features on it. 
@@ -51,7 +64,7 @@ This example is particularly designed for flow counting, thus RTSP source is nec
 
     - Target    : user define which area should focus on, i.e. where counter operate.
 
-    - Ignore    : user define which area should be ignored.
+    - Ignore    : user define which area should be be ignoredd.
 
 - Counter
 
@@ -73,7 +86,7 @@ This example is particularly designed for flow counting, thus RTSP source is nec
 
 - YOLOv4
 
-    - Tracker needs the exact position of object, which means we have to apply object detection first. The exact position of object will return from it.
+    - Tracker needs the exact position of object, which means we have to apply object detection first. The exact position of object will return from it. The exact position of object will return from it.
 
 - TensorRT
 
@@ -97,7 +110,7 @@ This example is particularly designed for flow counting, thus RTSP source is nec
 
 :x: Without NIVIDA Jetson device.
 
-### Prerequisite
+#### Prerequisite
 
 :zero: Update and upgrade your "pip3" and "apt-get" first
 ```shell
@@ -194,6 +207,3 @@ result
 
 <<<<<<< HEAD
 :star: This repository is under MIT License.
-=======
-:star: This repository is under MIT License.
->>>>>>> fee63c3ed8eee580fcd12c5e9c18de867812dc44
