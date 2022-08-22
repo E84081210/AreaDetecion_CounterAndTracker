@@ -24,8 +24,6 @@ Pedestrian flow analysis with YOLOv4-TensorRT, reaching a combination of area de
     
 - [Usage]
 
-- [Usage]
-
 - [License](#license)
 
 ### Background
@@ -39,20 +37,6 @@ The primary features are Tracker, Areadetecion and Counter. Let's dive into it i
 3. Counter: comparing with the previous frame, we can easily tell whether "enter" or "entrance".
 
 I still have tons of things to learn, considering code style and fundamental knowledge. It's would be nice if you share with me what or how to improve my work, so feel free to leave the comment or send a text to me, have a nice one ! --AntonyChiu
-
-
-### Background
-" AreaDetecion_CounterAndTracker " was originally inspired by [jkjung-avt/tensorrt_demos](https://github.com/jkjung-avt/tensorrt_demos), what I do is adding more features on it. 
-
-After browsing around GitHub, I can't find an futher application based on him, or just too obscure for an internship like me, so I decided to write down my own one. 
-
-The primary features are Tracker, Areadetecion and Counter. Let's dive into it if you are interested.
-1. Tracker: there are lots of built-in package in OpenCV, leading to high-end device demanding eventually. I adopt the simplest algorithm to rasie the accuracy, which allows device such as Jetson NANO with yolov3-tiny to operate it smoothly. By the way, since we don't have precise tracker, it's will be embarrassed if we label it with ID, so I decided to hide it.
-2. AreaDetection: in order to reduce the burden on device, if a person enter ignored area, it will not display bounding boxes or go through the claculation of tracker. On top of that, ignored area makes windows keep neat.
-3. Counter: comparing with the previous frame, we can easily tell whether "enter" or "entrance".
-
-I still have tons of things to learn, considering code style and fundamental knowledge. It's would be nice if you share with me what or how to improve my work, so feel free to leave the comment or send a text to me, have a nice one ! --AntonyChiu
-
 
 ### Introduction
 
@@ -205,5 +189,4 @@ result
 2. [NVIDIA TensorRT](https://github.com/NVIDIA/TensorRT)
 3. [OpenCV document](https://docs.opencv.org/4.x/)
 
-<<<<<<< HEAD
 :star: This repository is under MIT License.
