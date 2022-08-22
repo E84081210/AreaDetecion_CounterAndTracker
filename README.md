@@ -4,7 +4,7 @@
 Pedestrian flow analysis with YOLOv4-TensorRT, reaching a combination of area detection and object tracker.
 - Developing with NVIDIA Jetson platform is mandatory.
 - This code is written for educational purposes.
-- Design for scenario such as company or street RTSP source.
+- Design for scenarios such as company or street RTSP source.
 
 #### Table of contents
 
@@ -22,21 +22,21 @@ Pedestrian flow analysis with YOLOv4-TensorRT, reaching a combination of area de
 
 - [Prerequisite](#prerequisite)
     
-- [Usage]
+- [Usage](#usage)
 
 - [License](#license)
 
 ### Background
-" AreaDetecion_CounterAndTracker " was originally inspired by [jkjung-avt/tensorrt_demos](https://github.com/jkjung-avt/tensorrt_demos), what I do is adding more features on it. 
+" AreaDetecion_CounterAndTracker " was originally inspired by [jkjung-avt/tensorrt_demos](https://github.com/jkjung-avt/tensorrt_demos), what I do is add more features to it. 
 
-After browsing around GitHub, I can't find an futher application based on him, or just too obscure for an internship like me, so I decided to write down my own one. 
+After browsing around GitHub, I can't find a further application based on him, or just too obscure for an internship like me, so I decided to write down my own one. 
 
-The primary features are Tracker, Areadetecion and Counter. Let's dive into it if you are interested.
-1. Tracker: there are lots of built-in package in OpenCV, leading to high-end device demanding eventually. I adopt the simplest algorithm to rasie the accuracy, which allows device such as Jetson NANO with yolov3-tiny to operate it smoothly. By the way, since we don't have precise tracker, it's will be embarrassed if we label it with ID, so I decided to hide it.
-2. AreaDetection: in order to reduce the burden on device, if a person enter ignored area, it will not display bounding boxes or go through the claculation of tracker. On top of that, ignored area makes windows keep neat.
-3. Counter: comparing with the previous frame, we can easily tell whether "enter" or "entrance".
+The primary features are Tracker, Areadetecion, and Counter. Let's dive into it if you are interested.
+1. Tracker: there are lots of built-in packages in OpenCV, leading to high-end device demand eventually. I adopt the simplest algorithm to raise the accuracy, which allows devices such as Jetson NANO with yolov3-tiny to operate smoothly. By the way, since we don't have a precise tracker, it's will be embarrassed if we label it with ID, so I decided to hide it.
+2. AreaDetection: to reduce the burden on the device, if a person enters ignored area, it will not display bounding boxes or go through the calculation of tracker. On top of that, ignored area makes windows keep neat.
+3. Counter: compared with the previous frame, we can easily tell whether "enter" or "entrance".
 
-I still have tons of things to learn, considering code style and fundamental knowledge. It's would be nice if you share with me what or how to improve my work, so feel free to leave the comment or send a text to me, have a nice one ! --AntonyChiu
+I still have tons of things to learn, considering code style and fundamental knowledge. It's would be nice if you share with me what or how to improve my work, so feel free to leave a comment or send a text to me, have a nice one ! --AntonyChiu
 
 ### Introduction
 
@@ -46,51 +46,50 @@ This example is particularly designed for flow counting, thus RTSP source is nec
 
 - AreaDetection
 
-    - Target    : user define which area should focus on, i.e. where counter operate.
+    - Target    : user define which area should focus on, i.e. where counter operates.
 
-    - Ignore    : user define which area should be be ignoredd.
+    - Ignore    : user define which area should be ignored.
 
 - Counter
 
-    - Exit & Entrance : classify whether person is getting out or in the area.
+    - Exit & Entrance : classify whether the person is getting out or in the area.
 
-    - FlowCount       : total of flow count so far.
+    - FlowCount       : total flow count so far.
 
 - Application(optional)
 
-    - Once people enter area, you can do things like: sent email to host, open door, alert on screen, etc.
+    - Once people enter the area, you can do things like send an email to host, open the door, alert on the screen, etc.
 
 #### Methods
 
 - Tracker
 
-    - We will track object via the chage of central position, instead of using tracker from OpenCV, which is well optimized.
+    - We will track objects via the change of central position, instead of using tracker from OpenCV, which is well optimized.
 
-    - I also wrote a simple code about foundation of tracker, check **tracker_demo.py** if you are interested.
+    - I also wrote a simple code about the foundation of tracker, check **tracker_demo.py** if you are interested.
 
 - YOLOv4
 
-    - Tracker needs the exact position of object, which means we have to apply object detection first. The exact position of object will return from it. The exact position of object will return from it.
-
+    - Tracker needs the exact position of object, which means we have to apply object detection first.
 - TensorRT
 
-    - speed up the process. I recommendyou take a look at [NVIDIA official website](https://developer.nvidia.com/tensorrt).
+    - speed up the process. I recommend you taking a look at [NVIDIA's official website](https://developer.nvidia.com/tensorrt).
 
 - Docker
 
-    - Build environment faster and automatically.  
+    - Build the environment faster and automatically.  
 
 ### This example is for...
 
-:heavy_check_mark: Want to learn object detecion, OpenCV visualization and tracker.
+:heavy_check_mark: Want to learn object detection, OpenCV, and visualization and tracker.
 
 :heavy_check_mark: Familiar with basic Python, especially class & object.
 
-:heavy_check_mark: Read [jkjung-avt/tensorrt_demo](https://github.com/jkjung-avt/tensorrt_demos) beforehead is more than better.
+:heavy_check_mark: Read [jkjung-avt/tensorrt_demo](https://github.com/jkjung-avt/tensorrt_demos) beforehand is more than better.
 
-:x: Looking for deeper TensorRT lesson.
+:x: Looking for a deeper TensorRT lesson.
 
-:x: Off-the-shelf product. The precision is about 90 %, and it will decrease in different scenario.
+:x: Off-the-shelf product. The precision is about 90 %, and it will decrease in different scenarios.
 
 :x: Without NIVIDA Jetson device.
 
@@ -116,7 +115,7 @@ $ sudo docker run {name:tag}
 $ sudo docker exec -it {name:tag}
 ```
 
-:raised_hands: __Back up plan__: If you meet some problem with Docker, you may also install package manually.
+:raised_hands: __Back up plan__: If you meet some problem with Docker, you may also install packages manually.
 | Package   | Version   | Note            |
 | :----     | :---      | :---            |
 | OpenCV    | 3.4.6     | latest is fine  |
@@ -138,7 +137,7 @@ $ cd ${HOME}/Innotect-humanDetecion/plugins
 $ make
 ```
 
-:four: Download YOLOv4 models and convert it to ONNX and then to TensorRT engine. We take "yolov4-416" this time.
+:four: Download YOLOv4 model and convert it to ONNX and then to TensorRT engine. We take "yolov4-416" this time.
 ```shell
 $ cd ${HOME}/Innotect-humanDetecion/yolo
 $ ./download_yolo.s
@@ -146,9 +145,9 @@ $ python3 yolo_to_onnx.py -m yolov4-416
 $ python3 onnx_to_tensorrt.py -m yolov4-416
 ```
 
-Last step "onnx_to_tensorrt.py" takes about half hour on my Jetson AGX Xavier.
+The last step "onnx_to_tensorrt.py" takes about half an hour on my Jetson AGX Xavier.
 
-:five: Final step: go to "rtsp.sh", and modify your RTSP ID and YOLO model name. Run ```chmod +x rtsp.sh``` avoiding shell scipt is denied by permission.
+:five: Final step: go to "rtsp.sh", and modify your RTSP ID and YOLO model name. Run ```chmod +x rtsp.sh``` avoiding shell script is denied by permission.
 ```shell
 # rtsp.sh
 !#/bin/bash
@@ -157,7 +156,8 @@ python3.8 trt_yolo.py -m yolov4-416 --rtsp {RTSP_ADDRESS}
 ```
 
 ### Usage
-:one: It's will take little bit longer for initial operataion.
+
+:one: It will take a little bit longer for the initial operation.
 ```shell
 cd ${HOME}/Innotect-humanDetecion/
 /rtsp.sh
@@ -166,11 +166,11 @@ cd ${HOME}/Innotect-humanDetecion/
 預留
 ```
 
-:two: Draw Target area, demanding at least three points. Press "C" to clean all points, "H" to show help message, "Q" to continue.
+:two: Draw Target area, demanding at least three points. Press "C" to clean all points, "H" to show help message, and "Q" to continue.
 
-Focus area will count and carry out command such as open door.
+Focus area will count and carry out commands such as open the door.
 
-:three: Draw Ignore area, demanding at least three points. Press "C" to clean all points, "H" to show help message, "Q" to continue.
+:three: Draw Ignore area, demanding at least three points. Press "C" to clean all points, "H" to show help message, and "Q" to continue.
 __Congrats!__ 
 result
 
@@ -178,7 +178,7 @@ result
 ### Licences
 
 :star: Independence developer
-1. [MaxChang](https://github.com/MaxChangInnodisk), my mentor, who brings me to world of coding. You own my respect.
+1. [MaxChang](https://github.com/MaxChangInnodisk), my mentor, who brings me to the world of coding. You own my respect.
 2. [jkjung-avt/tensorrt_demos](https://github.com/jkjung-avt/tensorrt_demos), 80% of my repository is based on it.
 3. [saimj7/People-Counting-in-Real-Time](https://github.com/saimj7/People-Counting-in-Real-Time).
 4. [Pysource](https://pysource.com) teaches me the foundation of tracker.
