@@ -1,7 +1,11 @@
 # AreaDetecion_CounterAndTracker
 
 [![Yolov4](https://img.shields.io/badge/YOLOv4--TRT-AreaDetection-brightgreen)](https://github.com/E84081210/AreaDetecion_CounterAndTracker)
+<<<<<<< HEAD
 Pedestrian flow analysis with YOLOv4-TensorRT, reaching a combination of area detection and object tracker.
+=======
+People-flow counting with YOLOv4-TensorRT, reaching a combination of area detection and object tracker.
+>>>>>>> fee63c3ed8eee580fcd12c5e9c18de867812dc44
 - Developing with NVIDIA Jetson platform is mandatory.
 - This code is written for educational purposes.
 - Design for scenario such as company or street RTSP source.
@@ -188,4 +192,8 @@ result
 2. [NVIDIA TensorRT](https://github.com/NVIDIA/TensorRT)
 3. [OpenCV document](https://docs.opencv.org/4.x/)
 
+<<<<<<< HEAD
 :star: This repository is under MIT License.
+=======
+:star: This repository is under MIT License.
+>>>>>>> fee63c3ed8eee580fcd12c5e9c18de867812dc44
