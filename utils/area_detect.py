@@ -64,7 +64,7 @@ class AreaDetection:
     def add_pnt(self, event, x, y, flags, param):
         """Record the points, refresh it if too much"""
         if event == cv2.EVENT_LBUTTONDOWN:
-            if len(self.save_pnt) < 8:
+            if len(self.save_pnt) < 29:
                 # append point position
                 self.refresh_window(win_only=True)
                 self.save_pnt.append([x, y])
@@ -75,7 +75,7 @@ class AreaDetection:
             else:
                 # refresh frame if not satisfy
                 self.refresh_window()
-                self.remind(self.draw_frame, "Max points 9")
+                self.remind(self.draw_frame, "Max points 30")
         if event == cv2.EVENT_MBUTTONDOWN:
             if len(self.save_pnt)!=0:
                 self.refresh_window(win_only=True)

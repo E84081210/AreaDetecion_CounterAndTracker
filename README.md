@@ -12,9 +12,7 @@ Pedestrian flow analysis with YOLOv4-TensorRT, reaching a combination of area de
 
 ![flowAnalyze](./docs/flowAnalyze.jpeg)
 
-<video height="400" controls preload=auto >
-<source src="./docs/Counter_demo.mp4">
-</video>
+![Counter](./docs/Counter.gif)
 
 
 #### Table of contents
@@ -176,17 +174,22 @@ python3.8 trt_yolo.py -m yolov4-416 --rtsp {RTSP_ADDRESS}
 cd ${HOME}/Innotect-humanDetecion/
 /rtsp.sh
 ```
-```shell
-預留
-```
 
 :two: Draw Target area, demanding at least three points. Press "C" to clean all points, "H" to show help message, and "Q" to continue.
+
+![01](./docs/01.png)
+![02](./docs/02.png)
 
 Focus area will count and carry out commands such as open the door.
 
 :three: Draw Ignore area, demanding at least three points. Press "C" to clean all points, "H" to show help message, and "Q" to continue.
+
+![03](./docs/03.png)
+![04](./docs/04.png)
+
 __Congrats!__ 
 result
+![05](./docs/05.png)
 
 
 ### Licences
