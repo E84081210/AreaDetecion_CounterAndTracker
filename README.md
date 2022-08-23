@@ -1,10 +1,21 @@
 # AreaDetecion_CounterAndTracker
 
 [![Yolov4](https://img.shields.io/badge/YOLOv4--TRT-AreaDetection-brightgreen)](https://github.com/E84081210/AreaDetecion_CounterAndTracker)
+
 Pedestrian flow analysis with YOLOv4-TensorRT, reaching a combination of area detection and object tracker.
+
 - Developing with NVIDIA Jetson platform is mandatory.
+
 - This code is written for educational purposes.
+
 - Design for scenarios such as company or street RTSP source.
+
+![flowAnalyze](./docs/flowAnalyze.jpeg)
+
+<video height="400" controls preload=auto >
+<source src="./docs/Counter_demo.mp4">
+</video>
+
 
 #### Table of contents
 
@@ -32,8 +43,11 @@ Pedestrian flow analysis with YOLOv4-TensorRT, reaching a combination of area de
 After browsing around GitHub, I can't find a further application based on him, or just too obscure for an internship like me, so I decided to write down my own one. 
 
 The primary features are Tracker, Areadetecion, and Counter. Let's dive into it if you are interested.
+
 1. Tracker: there are lots of built-in packages in OpenCV, leading to high-end device demand eventually. I adopt the simplest algorithm to raise the accuracy, which allows devices such as Jetson NANO with yolov3-tiny to operate smoothly. By the way, since we don't have a precise tracker, it's will be embarrassed if we label it with ID, so I decided to hide it.
+
 2. AreaDetection: to reduce the burden on the device, if a person enters ignored area, it will not display bounding boxes or go through the calculation of tracker. On top of that, ignored area makes windows keep neat.
+
 3. Counter: compared with the previous frame, we can easily tell whether "enter" or "entrance".
 
 I still have tons of things to learn, considering code style and fundamental knowledge. It's would be nice if you share with me what or how to improve my work, so feel free to leave a comment or send a text to me, have a nice one ! --AntonyChiu
@@ -77,7 +91,7 @@ This example is particularly designed for flow counting, thus RTSP source is nec
 
 - Docker
 
-    - Build the environment faster and automatically.  
+    - Build the environment faster and automatically.
 
 ### This example is for...
 
