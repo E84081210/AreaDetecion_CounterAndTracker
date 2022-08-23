@@ -19,8 +19,6 @@ Pedestrian flow analysis with YOLOv4-TensorRT, reaching a combination of area de
 
 - [Background](#background)
 
-- [Background](#background)
-
 - [Introduciton](#introduction)
 
     - [Features](#features)
@@ -174,21 +172,30 @@ python3.8 trt_yolo.py -m yolov4-416 --rtsp {RTSP_ADDRESS}
 cd ${HOME}/Innotect-humanDetecion/
 /rtsp.sh
 ```
+```shell
+[08/23/2022-10:13:07] [TRT] [I] [MemUsageChange] Init CUDA: CPU +201, GPU +0, now: CPU 271, GPU 3957 (MiB)
+[08/23/2022-10:13:07] [TRT] [I] Loaded engine size: 127 MiB
+[08/23/2022-10:13:07] [TRT] [W] Using an engine plan file across different models of devices is not recommended and is likely to affect performance or even cause errors.
+[08/23/2022-10:13:10] [TRT] [I] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +261, GPU +248, now: CPU 696, GPU 4365 (MiB)
+[08/23/2022-10:13:11] [TRT] [I] [MemUsageChange] Init cuDNN: CPU +84, GPU +81, now: CPU 780, GPU 4446 (MiB)
+[08/23/2022-10:13:11] [TRT] [I] [MemUsageChange] TensorRT-managed allocation in engine deserialization: CPU +0, GPU +123, now: CPU 0, GPU 123 (MiB)
+[08/23/2022-10:13:11] [TRT] [I] [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +0, now: CPU 653, GPU 4327 (MiB)
+[08/23/2022-10:13:11] [TRT] [I] [MemUsageChange] Init cuDNN: CPU +0, GPU +0, now: CPU 653, GPU 4327 (MiB)
+[08/23/2022-10:13:11] [TRT] [I] [MemUsageChange] TensorRT-managed allocation in IExecutionContext creation: CPU +0, GPU +34, now: CPU 0, GPU 157 (MiB)
+```
 
 :two: Draw Target area, demanding at least three points. Press "C" to clean all points, "H" to show help message, and "Q" to continue.
 
 ![01](./docs/01.png)
 ![02](./docs/02.png)
 
-Focus area will count and carry out commands such as open the door.
-
 :three: Draw Ignore area, demanding at least three points. Press "C" to clean all points, "H" to show help message, and "Q" to continue.
 
 ![03](./docs/03.png)
 ![04](./docs/04.png)
 
-__Congrats!__ 
-result
+__Congrats!__ <br>
+Focus area will count and carry out commands such as open the door. The detection function is triggered when an object steps into the area, which refers to the coordinates at the center-bottom.
 ![05](./docs/05.png)
 
 
