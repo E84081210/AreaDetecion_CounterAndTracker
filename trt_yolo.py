@@ -12,7 +12,7 @@ import subprocess
 import cv2
 import numpy as np
 import pycuda.autoinit
-#from nvidia.Desktop.tensorrt_demos.utils import AreaDetection  # This is needed for initializing CUDA driver
+# This is needed for initializing CUDA driver
 
 from utils.style import BLUE, RED, GREEN, WHITE, KELIN, BLACK, SLIVER, \
     FONT_SCALE, FONT, LINE, ALPHA, Remind
@@ -83,7 +83,7 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis):
     while True:
         frame_count += 1
         tic = time.time()
-        if tic - PreviousOpen > 5:
+        if tic - PreviousOpen > 3:
             DoorRequest = True
         
         # initialize current point

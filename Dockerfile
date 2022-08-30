@@ -1,35 +1,41 @@
 FROM nvcr.io/nvidia/l4t-jetpack:r35.1.0
 USER root
 WORKDIR /workplace
-COPY yolo/ ./yolo/
-COPY utils/ ./utils/
+COPY ./yolo/ ./yolo/
+COPY ./utils/ ./utils/
+COPY ./plugins/ ./plugins/
+COPY ["trt_yolo.py", "rtsp.sh", "/workplace/"]
+RUN apt-get update \
+    && echo "Install software-properties-common" \
+    && echo "=========================================" \
+    && apt-get install software-properties-common -qqy \
 
-WORKDIR /workplace/yolo
-RUN apt-get install python3-pip -y \
-    && pip3 install --upgrade pip
-RUN pip3 install --upgrade pip \
-    && pip3 install protobuf==3.8.0 \
-    && pip3 install pycuda
-RUN python3 -m pip install onnx==1.9.0 \
-    && pip3 install opencv-python 
+    && echo "Install ppa:deadsnakes/ppa" \
+    && echo "=========================================" \
+    && add-apt-repository ppa:deadsnakes/ppa
 
-CMD ["bash", "-c", "echo", "Docker container has been activated", "&&", "/bin/bash"]
+RUN echo "Install Python3.8 package" \
+    && echo "=========================================" \
+    && apt install python3.8-dev -qqy \
+    && apt install python3.8-distutils -qqy \
 
-# 
-# PyCUDA
-#
+    && echo "Install pip3" \
+    && echo "=========================================" \
+    && pip3 install --upgrade pip 
 
-# ENV PATH="/usr/local/cuda/bin:${PATH}"
-# ENV LD_LIBRARY_PATH="/usr/local/cuda/lib64:${LD_LIBRARY_PATH}"
-# RUN echo "$PATH" && echo "$LD_LIBRARY_PATH"
-# RUN pip3 install --upgrade pip \
-#     && python3 -m pip install python-dev-tools --user --upgrade \
-#     && pip3 install pycuda --verbose
+RUN apt-get update \
+    && echo "Install numpy and protobuf" \
+    && echo "=========================================" \
+    && pip3 install numpy --upgrade -qq \
+    && pip3 install protobuf==3.8.0 -qq \
 
-# COPY ["./trt_yolo.py", "./requirements.sh", "./rtsp.sh", "/workplace/"]
-# RUN chmod +x *.sh \ 
-#     && ./requirements.sh \
-# CMD ["bash", "-c", "echo", "Docker container has been activated", "&&", "/bin/bash"]
+    && echo "Install opencv-python" \
+    && echo "=========================================" \
+    && pip3 install opencv-python -qq \ 
 
+    && echo "Install Pycuda 2019.1.2 and ONNX" \
+    && echo "=========================================" \
+    && pip3 install pycuda==2019.1.2 \
+    && pip3 install onnx 
 
-
+CMD ["bin/bash"]
