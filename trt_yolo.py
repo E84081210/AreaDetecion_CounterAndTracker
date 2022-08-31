@@ -121,14 +121,13 @@ def loop_and_detect(cam, trt_yolo, conf_th, vis):
             elif interest == 1:
                 cur_pnt.append([center_x, center_y, 1, 1])
                 if DoorRequest:
-                    p = subprocess.run(["mosquitto_pub", "-h" , "172.16.21.2", "-t", "action", "-m", "OpenDoor"])
+                    # p = subprocess.run(["mosquitto_pub", "-h" , "162.32.22.2", "-t", "action", "-m", "open"])
                     PreviousOpen = time.time()
-                    if p.returncode == 0:
-                        print("Open")
+                    # if p.returncode == 0:
+                    #     print("Open")
                     DoorRequest = False                    
                 # Open the door
                 # MAKE SURE you have 100% confidence with your program
-                # subprocess("mosquitto_pub -h 172.16.21.2 -t action -m OpenDoor", shell=True)
             else:
                 cur_pnt.append([center_x, center_y, 0, 1])
 

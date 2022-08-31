@@ -1,0 +1,45 @@
+FROM nvcr.io/nvidia/l4t-jetpack:r35.1.0
+USER root
+WORKDIR /workplace
+COPY ./yolo/ ./yolo/
+COPY ./utils/ ./utils/
+COPY ./plugins/ ./plugins/
+COPY ["trt_yolo.py", "rtsp.sh", "/workplace/"]
+RUN apt-get update \
+    && echo "Install software-properties-common" \
+    && echo "=========================================" \
+    && apt-get install software-properties-common -qqy \
+
+    && echo "Install ppa:deadsnakes/ppa" \
+    && echo "=========================================" \
+    && add-apt-repository ppa:deadsnakes/ppa
+
+RUN alias python3="/usr/bin/python3.7" \
+    && apt install python3-pip -qqy \
+
+    && echo "Install Python3.7" \
+    && echo "=========================================" \
+    && apt install python3.7 -qqy \
+    && apt install python3.7-dev -qqy \
+    && apt install python3.7-distutils -qqy \
+
+    && echo "Install pip3" \
+    && echo "=========================================" \
+    && python3.7 -m pip install --upgrade pip 
+    
+RUN apt-get update \
+    && echo "Install numpy and protobuf" \
+    && echo "=========================================" \
+    && python3.7 -m pip install numpy --upgrade -qq \
+    && python3.7 -m pip install protobuf==3.8.0 -qq \
+
+    && echo "Install opencv-python" \
+    && echo "=========================================" \
+    && python3.7 -m pip install opencv-python -qq \ 
+
+    && echo "Install Pycuda 2019.1.2 and ONNX" \
+    && echo "=========================================" \
+    && python3.7 -m pip install pycuda==2019.1.2 \
+    && python3.7 -m pip install onnx 
+
+CMD ["bash", "-c", "echo", "Docker container has been activated", "&&", "/bin/bash"]
